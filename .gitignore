@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+*.egg
+dist/
+build/
+.env
+.venv
+env/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# JavaScript / Node
+node_modules/
+dist/
+.npm
+.cache
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Logs
+*.log
+
+# Uploads (arquivos de evidências — gerados em runtime)
+backend/uploads/
+
+# Coverage
+htmlcov/
+.coverage
+
+# Docs and  Screenshots
+docs/
+screenshots/
+
+# VSCode
+.vscode/
+.github/
