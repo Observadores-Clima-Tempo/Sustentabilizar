@@ -90,6 +90,16 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center px-4 py-12">
+      {/* Voltar para a landing page */}
+      <div className="w-full max-w-md mb-4">
+        <Link
+          to="/"
+          className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition-colors duration-150"
+        >
+          <span>←</span> Voltar ao início
+        </Link>
+      </div>
+
       {/* Logo */}
       <div className="flex items-center gap-2 mb-6">
         <span className="text-2xl">🌿</span>
