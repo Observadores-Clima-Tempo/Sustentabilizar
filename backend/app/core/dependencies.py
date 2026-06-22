@@ -1,8 +1,14 @@
 from typing import Generator
 
+from fastapi import Depends, HTTPException, status
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from jose import JWTError
 from sqlalchemy.orm import Session
 
+from app.core.security import decode_access_token
 from app.db.session import SessionLocal
+
+http_bearer = HTTPBearer()
 
 
 def get_db() -> Generator[Session, None, None]:
@@ -12,3 +18,29 @@ def get_db() -> Generator[Session, None, None]:
         yield db
     finally:
         db.close()
+
+
+def get_current_user(
+    credentials: HTTPAuthorizationCredentials = Depends(http_bearer),
+    db: Session = Depends(get_db),
+):
+    """Valida o JWT e retorna o usuário autenticado. Levanta 401 se inválido."""
+    from app.models.user import User  # import local para evitar circular
+
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Token inválido ou expirado",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = decode_access_token(credentials.credentials)
+        user_id: str = payload.get("sub")
+        if user_id is None:
+            raise credentials_exception
+    except JWTError:
+        raise credentials_exception
+
+    user = db.query(User).filter(User.id == user_id).first()
+    if user is None or not user.is_active:
+        raise credentials_exception
+    return user

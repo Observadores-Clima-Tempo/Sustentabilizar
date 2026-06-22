@@ -35,6 +35,16 @@ class UserCreate(BaseModel):
         return upper
 
 
+class LoginIn(BaseModel):
+    email: EmailStr
+    password: str
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+
+
 class UserOut(BaseModel):
     id: UUID
     name: str

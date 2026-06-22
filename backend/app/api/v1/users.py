@@ -1,6 +1,13 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+
+from app.core.dependencies import get_current_user
+from app.models.user import User
+from app.schemas.user import UserOut
 
 router = APIRouter()
 
-# Endpoints de usuário serão implementados na Etapa 2:
-# GET /users/me
+
+@router.get("/me", response_model=UserOut)
+def get_me(current_user: User = Depends(get_current_user)):
+    """Retorna os dados do usuário autenticado (sem senha)."""
+    return current_user
