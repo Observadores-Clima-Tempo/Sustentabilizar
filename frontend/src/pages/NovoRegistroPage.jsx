@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createRecord } from '../services/waste.service'
 
 const WASTE_TYPES = [
@@ -24,6 +24,7 @@ const FREQUENCIES = [
 
 export default function NovoRegistroPage() {
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
 
   const [wasteType, setWasteType] = useState('')
   const [weightKg, setWeightKg] = useState('')
@@ -38,6 +39,8 @@ export default function NovoRegistroPage() {
   const mutation = useMutation({
     mutationFn: createRecord,
     onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['waste-records'] })
+      queryClient.invalidateQueries({ queryKey: ['certification'] })
       navigate(`/evidencia/${data.id}`)
     },
   })

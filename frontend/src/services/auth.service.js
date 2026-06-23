@@ -30,3 +30,13 @@ export async function getMe() {
   const response = await api.get('/users/me')
   return response.data
 }
+
+/**
+ * Atualiza os dados editáveis do usuário autenticado (nome, cidade, estado).
+ * @param {Object} data - { name?, city?, state? }
+ * @returns {Promise<Object>} UserOut
+ */
+export async function updateMe(data) {
+  const response = await api.put('/users/me', data)
+  return response.data
+}

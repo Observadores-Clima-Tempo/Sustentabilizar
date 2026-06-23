@@ -9,6 +9,7 @@ from app.models.user import User
 from app.models.waste_record import WasteRecord
 from app.schemas.waste_record import EvidenceOut
 from app.services.storage_service import save_evidence_file
+from app.services import certification_service
 
 router = APIRouter()
 
@@ -49,4 +50,7 @@ def upload_evidence(
     db.add(evidence)
     db.commit()
     db.refresh(evidence)
+
+    certification_service.recalculate(db, current_user.id)
+
     return evidence

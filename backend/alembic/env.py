@@ -13,6 +13,7 @@ from app.db.base import Base
 
 # Importa todos os modelos para que sejam registrados no metadata do Base
 from app.models import user, waste_record, evidence  # noqa: F401
+from app.models import admin_config, checklist_response, certification  # noqa: F401
 
 config = context.config
 

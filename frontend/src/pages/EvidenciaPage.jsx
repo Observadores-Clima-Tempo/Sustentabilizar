@@ -27,7 +27,9 @@ export default function EvidenciaPage() {
   const mutation = useMutation({
     mutationFn: (file) => uploadEvidence(file, recordId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['waste-record', recordId] })
+      queryClient.invalidateQueries({ queryKey: ['waste-record'] })
+      queryClient.invalidateQueries({ queryKey: ['waste-records'] })
+      queryClient.invalidateQueries({ queryKey: ['certification'] })
       navigate(`/registros/${recordId}`)
     },
   })

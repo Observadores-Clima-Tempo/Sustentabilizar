@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
+import { useAuth } from '../contexts/AuthContext'
 import { listRecords } from '../services/waste.service'
 
 const WASTE_LABELS = {
@@ -15,8 +16,8 @@ const WASTE_LABELS = {
 }
 
 const FILTER_TABS = [
-  { value: 'todos', label: 'Todos' },
-  ...Object.entries(WASTE_LABELS).map(([value, { label }]) => ({ value, label })),
+  { value: 'todos', label: 'Todos', icon: '🗂️' },
+  ...Object.entries(WASTE_LABELS).map(([value, { label, icon }]) => ({ value, label, icon })),
 ]
 
 function formatDate(dateStr) {
@@ -29,9 +30,10 @@ function formatDate(dateStr) {
 
 export default function RegistrosPage() {
   const [activeFilter, setActiveFilter] = useState('todos')
+  const { user } = useAuth()
 
   const { data: records = [], isLoading, isError } = useQuery({
-    queryKey: ['waste-records'],
+    queryKey: ['waste-records', user?.id],
     queryFn: listRecords,
   })
 
@@ -58,23 +60,22 @@ export default function RegistrosPage() {
         </Link>
       </div>
 
-      {/* Tabs de filtro */}
-      <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-        <div className="flex overflow-x-auto">
-          {FILTER_TABS.map(({ value, label }) => (
-            <button
-              key={value}
-              onClick={() => setActiveFilter(value)}
-              className={`flex-shrink-0 px-4 py-3 text-sm font-medium border-b-2 transition-colors duration-150 ${
-                activeFilter === value
-                  ? 'border-green-700 text-green-700'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
+      {/* Cápsulas de filtro */}
+      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+        {FILTER_TABS.map(({ value, label, icon }) => (
+          <button
+            key={value}
+            onClick={() => setActiveFilter(value)}
+            className={`flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium border transition-all duration-150 ${
+              activeFilter === value
+                ? 'bg-green-700 border-green-700 text-white shadow-sm'
+                : 'bg-white border-gray-200 text-gray-600 hover:border-green-400 hover:text-green-700'
+            }`}
+          >
+            <span>{icon}</span>
+            <span>{label}</span>
+          </button>
+        ))}
       </div>
 
       {/* Estado de carregamento */}

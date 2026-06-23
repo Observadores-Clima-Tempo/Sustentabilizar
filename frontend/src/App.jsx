@@ -8,11 +8,14 @@ import { AuthProvider } from './contexts/AuthContext'
 import LandingPage from './pages/LandingPage'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
+import ChecklistPage from './pages/ChecklistPage'
 import DashboardPage from './pages/DashboardPage'
 import NovoRegistroPage from './pages/NovoRegistroPage'
 import EvidenciaPage from './pages/EvidenciaPage'
 import RegistrosPage from './pages/RegistrosPage'
 import RegistroDetalhe from './pages/RegistroDetalhe'
+import CertificadoPage from './pages/CertificadoPage'
+import PerfilPage from './pages/PerfilPage'
 import AdminChecklistPage from './pages/admin/AdminChecklistPage'
 import AdminPontuacaoPage from './pages/admin/AdminPontuacaoPage'
 import AdminCertificacaoPage from './pages/admin/AdminCertificacaoPage'
@@ -28,16 +31,12 @@ function App() {
           <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
           <Route path="/register" element={<PublicRoute><RegisterPage /></PublicRoute>} />
 
-          {/* Rotas privadas — Etapa 3+ */}
+          {/* Checklist — rota privada fora do DashboardLayout (tela própria) */}
           <Route
             path="/checklist"
             element={
               <PrivateRoute>
-                <div className="min-h-screen flex items-center justify-center bg-gray-100">
-                  <p className="text-gray-500 text-sm">
-                    Checklist — implementado na Etapa 4
-                  </p>
-                </div>
+                <ChecklistPage />
               </PrivateRoute>
             }
           />
@@ -55,23 +54,8 @@ function App() {
             <Route path="/registros/:id" element={<RegistroDetalhe />} />
             <Route path="/novo" element={<NovoRegistroPage />} />
             <Route path="/evidencia/:recordId" element={<EvidenciaPage />} />
-            {/* Placeholders para Etapa 4 */}
-            <Route
-              path="/certificado"
-              element={
-                <div className="flex items-center justify-center py-16">
-                  <p className="text-gray-500 text-sm">Certificado — implementado na Etapa 4</p>
-                </div>
-              }
-            />
-            <Route
-              path="/perfil"
-              element={
-                <div className="flex items-center justify-center py-16">
-                  <p className="text-gray-500 text-sm">Perfil — implementado na Etapa 4</p>
-                </div>
-              }
-            />
+            <Route path="/certificado" element={<CertificadoPage />} />
+            <Route path="/perfil" element={<PerfilPage />} />
           </Route>
 
           {/* Painel Admin */}

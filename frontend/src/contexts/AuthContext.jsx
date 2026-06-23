@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useState } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 import { getMe } from '../services/auth.service'
 
 const AuthContext = createContext(null)
@@ -6,6 +7,7 @@ const AuthContext = createContext(null)
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
+  const queryClient = useQueryClient()
 
   // Ao montar, tenta restaurar a sessão se há token salvo
   useEffect(() => {
@@ -22,20 +24,24 @@ export function AuthProvider({ children }) {
 
   /**
    * Persiste o token e armazena os dados do usuário no contexto.
-   * Chamado logo após login ou register bem-sucedido.
+   * Limpa o cache antes de definir o novo usuário para evitar
+   * que dados de uma sessão anterior vazem para a nova.
    */
   const signIn = useCallback((token, userData) => {
+    queryClient.clear()
     localStorage.setItem('access_token', token)
     setUser(userData)
-  }, [])
+  }, [queryClient])
 
   /**
-   * Remove o token e limpa o estado do usuário (logout).
+   * Remove o token, limpa o estado do usuário e descarta todo o
+   * cache do React Query para que nenhum dado persista entre sessões.
    */
   const signOut = useCallback(() => {
     localStorage.removeItem('access_token')
     setUser(null)
-  }, [])
+    queryClient.clear()
+  }, [queryClient])
 
   return (
     <AuthContext.Provider value={{ user, loading, signIn, signOut, isAdmin: user?.is_admin === true }}>

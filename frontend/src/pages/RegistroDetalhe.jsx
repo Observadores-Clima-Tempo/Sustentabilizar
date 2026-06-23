@@ -1,5 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
+import { useAuth } from '../contexts/AuthContext'
 import { getRecord } from '../services/waste.service'
 
 const WASTE_LABELS = {
@@ -43,9 +44,10 @@ function formatDateTime(isoStr) {
 
 export default function RegistroDetalhe() {
   const { id } = useParams()
+  const { user } = useAuth()
 
   const { data: record, isLoading, isError } = useQuery({
-    queryKey: ['waste-record', id],
+    queryKey: ['waste-record', user?.id, id],
     queryFn: () => getRecord(id),
   })
 

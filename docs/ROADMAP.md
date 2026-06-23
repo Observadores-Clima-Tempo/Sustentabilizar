@@ -184,7 +184,7 @@
 
 ---
 
-### Etapa 4 · Checklist + Certificação + Dashboard Completo
+### ✅ Etapa 4 · Checklist + Certificação + Dashboard Completo — CONCLUÍDA (23/06/2026)
 **Objetivo:** Diagnóstico onboarding, certificação automática e dashboard Início/Certificado/Perfil finalizados.  
 **Semana:** 12–18/jul
 
@@ -193,58 +193,58 @@
 #### Backend — Checklist
 | Tarefa | Critério de conclusão |
 |---|---|
-| Modelos SQLAlchemy `ChecklistItem` + `ChecklistResponse` + Pydantic schemas + migration | Tabelas criadas conforme DATA-MODEL.md; campo `options` JSONB com estrutura `[{value, label, points}]` |
-| Script de seed para perguntas do checklist | `backend/app/db/seed_checklist.py` executável; perguntas inseridas sem duplicatas; novas perguntas gerenciadas via admin panel |
-| Endpoint `GET /api/v1/checklist` | Retorna perguntas ativas ordenadas por `order` para `pessoa_fisica` |
-| Endpoint `POST /api/v1/checklist/responses` | Salva respostas; calcula `points_earned` lendo `options[answer_value].points` da pergunta; dispara recálculo de certificação |
-| Modelo SQLAlchemy `Certification` + Pydantic schema (`CertificationOut`) + migration | Tabela `certifications` com enum `level`; campos `score_from_checklist`, `score_from_records`, `total_score` |
-| Implementar `certification_service.py` (lógica desacoplada de pontuação → nível) | Calcula pontuação total; salva novo registro; retorna critérios avaliados individualmente para exibição na UI |
-| Endpoint `GET /api/v1/certification/me` | Retorna nível atual, pontuação total, composição (checklist + registros) e status de cada critério |
-| Endpoint `PUT /api/v1/users/me` (protegido) | Permite editar nome, cidade e estado; e-mail e CPF imutáveis após cadastro |
+| Modelos SQLAlchemy `ChecklistItem` + `ChecklistResponse` + Pydantic schemas + migration | ✅ `ChecklistResponse` criado em `models/checklist_response.py`; migration `0004_checklist_certs` executada |
+| Modelo SQLAlchemy `Certification` + Pydantic schema (`CertificationOut`) + migration | ✅ `Certification` criado em `models/certification.py`; migration `0004_checklist_certs` executada |
+| Endpoint `GET /api/v1/checklist` | ✅ Retorna 7 perguntas ativas ordenadas por `order` para `pessoa_fisica` |
+| Endpoint `POST /api/v1/checklist/responses` | ✅ Salva respostas; calcula `points_earned` lendo `options[answer_value].points`; dispara recálculo de certificação |
+| Implementar `certification_service.py` (lógica completa) | ✅ `recalculate()` calcula checklist + records; persiste `Certification` via upsert; `get_certification_out()` retorna dados completos com critérios |
+| Endpoint `GET /api/v1/certification/me` | ✅ Retorna nível, pontuação total, composição (checklist + registros), critérios e thresholds |
+| Endpoint `PUT /api/v1/users/me` (protegido) | ✅ Permite editar nome, cidade e estado; e-mail e CPF imutáveis |
 
 #### Frontend — Serviços
 | Tarefa | Critério de conclusão |
 |---|---|
-| Implementar `checklist.service.js` (`getChecklist`, `submitResponses`) | Funções chamam a API |
-| Implementar `certification.service.js` (`getMyCertification`) | Retorna dados completos para a tela de certificado |
+| Implementar `checklist.service.js` (`getChecklist`, `submitResponses`) | ✅ Funções chamam a API via Axios |
+| Implementar `certification.service.js` (`getMyCertification`) | ✅ Retorna dados completos para a tela de certificado |
+| Adicionar `updateMe` ao `auth.service.js` | ✅ `PUT /users/me` implementado |
 
 #### Frontend — Tela de Diagnóstico Inicial (`/checklist`)
 | Tarefa | Critério de conclusão |
 |---|---|
-| Barra de progresso: "Pergunta X de Y" à esquerda + "X% concluído" à direita + barra verde preenchida proporcionalmente | Atualiza a cada navegação |
-| Card de pergunta dinâmico: badge do tipo (`SIM / NÃO`, `MÚLTIPLA ESCOLHA`, `ESCALA DE 1 A 5`), texto da pergunta, "Vale até X pontos" | Renderizado a partir dos dados da API, não hardcoded |
-| Opções de resposta por tipo: `yes_no` → 2 cards clicáveis (✅ Sim / ❌ Não); `multiple_choice` → N cards; `scale_1_5` → 5 boxes numerados com rótulos "Muito baixo" / "Muito alto" | Seleção ativa visualmente; botão "Próxima →" desabilitado até selecionar |
-| Navegação: botão "← Voltar" (oculto na 1ª pergunta) + botão "Próxima →"; hint "Selecione uma opção para continuar" | Navega entre perguntas sem recarregar |
-| Tela de resultado final: pontuação obtida + barra de progresso; nível desbloqueado (Bronze/Prata/Ouro); critérios atingidos; seção "Próximos passos"; botão "🏠 Ir para o Dashboard →" | Exibida após submissão de todas as respostas; redireciona ao clicar |
-| Redirect: após cadastro → `/checklist`; após checklist → `/dashboard` | Fluxo de onboarding completo sem desvios |
+| Barra de progresso: "Pergunta X de Y" + "X% concluído" + barra verde | ✅ Atualiza a cada navegação |
+| Card de pergunta dinâmico: badge tipo, texto, pontos máximos | ✅ Renderizado a partir dos dados da API |
+| Opções de resposta por tipo: `yes_no`, `multiple_choice`, `scale_1_5` | ✅ Seleção ativa visualmente; botão Próxima desabilitado sem seleção |
+| Navegação: Voltar / Próxima / Concluir | ✅ Navega sem recarregar; Voltar oculto na 1ª pergunta |
+| Tela de resultado final: pontuação + nível + próximos passos + botão Dashboard | ✅ Exibida após submissão |
+| Redirect: cadastro → `/checklist`; checklist → `/dashboard` | ✅ Fluxo de onboarding completo |
 
 #### Frontend — Tela de Certificado (`/certificado`)
 | Tarefa | Critério de conclusão |
 |---|---|
-| Card principal: badge "CERTIFICADO AMBIENTAL" + ícone do nível + nome do nível + pontos; nome do usuário + CPF + data de emissão + mensagem motivacional | Dados carregados da API |
-| Seção "Progressão de níveis": 3 medalhas (Bronze, Prata, Ouro) com pontuação mínima; indicador do nível atual; barra de progresso para o próximo nível; "Faltam X pontos para o nível [próximo]" | Cálculo baseado em `total_score` retornado pela API |
-| Seção "Critérios avaliados": lista com ✅/🔴 por critério + pontos obtidos ou faltantes | Renderizado dinamicamente a partir dos critérios retornados pela `certification_service` |
-| Seção "Composição da pontuação": linha Checklist inicial + linha Registros de resíduos + linha Total em destaque | |
-| CTA "+ Adicionar mais registros para evoluir" no rodapé | Navega para `/novo` |
+| Card principal: badge, ícone, nível, pontos, nome, CPF mascarado, data de emissão | ✅ Dados carregados da API |
+| Seção "Progressão de níveis": 3 medalhas + barra de progresso + "Faltam X pontos" | ✅ Cálculo baseado em `total_score` |
+| Seção "Critérios avaliados": ✅/🔴 por critério + pontos | ✅ Renderizado dinamicamente |
+| Seção "Composição da pontuação": checklist + registros + total | ✅ |
+| CTA "+ Adicionar mais registros para evoluir" | ✅ Navega para `/novo` |
 
 #### Frontend — Dashboard/Início (finalização)
 | Tarefa | Critério de conclusão |
 |---|---|
-| Card de certificação: badge do nível atual + pontuação + barra de progresso (nível atual → próximo) + "Faltam X pontos" | Dados reais da API de certificação |
-| 3 stat cards: Registros (30d), Total de registros, Tipos de resíduo | Dados agregados da API |
-| Seção "Ações rápidas": botão "Novo registro" (primário) + botão "Ver certificado" (secundário) | Links para `/novo` e `/certificado` |
-| Seção "Últimos registros": lista dos 4 mais recentes com ícone, tipo, peso, badge de evidência e data; link "Ver todos →" | Carregado via `useQuery`; clique no item navega para `/registros/:id` |
+| Card de certificação com badge, pontuação, barra de progresso e "Faltam X pontos" | ✅ Dados reais da API de certificação |
+| 3 stat cards: Registros (30d), Total, Tipos | ✅ |
+| Seção "Ações rápidas": Novo registro + Ver certificado | ✅ |
+| Seção "Últimos registros": 4 mais recentes com ícone, tipo, peso, badge de evidência | ✅ |
 
 #### Frontend — Tela de Perfil (`/perfil`)
 | Tarefa | Critério de conclusão |
 |---|---|
-| Card do usuário: avatar com inicial do nome, nome completo, e-mail, badge do nível atual, CPF, Cidade/Estado, tipo de perfil, "Membro desde [data]" | Dados do `useAuth()` |
-| Botão "Editar dados": abre formulário inline com campos Nome, Cidade, Estado editáveis; salva via `PUT /users/me` | E-mail e CPF exibidos como somente leitura |
-| Seção "Minhas estatísticas": 6 métricas em grade (pontuação total, total de registros, peso total registrado, registros com evidência, tipos de resíduo, registros últimos 30d) | Dados calculados/retornados pela API |
-| Tags "Tipos de resíduo registrados": badges coloridos para cada tipo distinto já registrado | Derivado da listagem de registros |
-| Botões de ação: "Ver meu certificado completo" → `/certificado`; "Refazer diagnóstico" → `/checklist`; "Sair da conta" (vermelho) → logout | Logout limpa AuthContext e redireciona para `/` |
+| Card do usuário: avatar, nome, e-mail, badge nível, CPF, cidade, estado, membro desde | ✅ |
+| Botão "Editar dados": formulário inline com Nome, Cidade, Estado; salva via `PUT /users/me` | ✅ E-mail e CPF somente leitura |
+| 6 métricas em grade: pontuação, registros, peso, evidências, tipos, 30d | ✅ |
+| Tags de tipos de resíduo registrados | ✅ |
+| Botões: Ver certificado / Refazer diagnóstico / Sair da conta | ✅ |
 
-**Entregável:** Fluxo completo de ponta a ponta. Cadastro → Diagnóstico → Dashboard → Registros + Evidências → Certificado automático.
+**Entregável:** ✅ Fluxo completo de ponta a ponta. Cadastro → Diagnóstico → Dashboard → Registros + Evidências → Certificado automático. Testado com curl: 7 perguntas, 55 pts → Bronze. Build frontend: 176 módulos, sem erros.
 
 ---
 

@@ -1,5 +1,6 @@
 import re
 from datetime import datetime
+from typing import Optional
 from uuid import UUID
 
 from pydantic import BaseModel, EmailStr, field_validator
@@ -58,3 +59,24 @@ class UserOut(BaseModel):
     is_admin: bool
 
     model_config = {"from_attributes": True}
+
+
+class UserUpdate(BaseModel):
+    name: Optional[str] = None
+    city: Optional[str] = None
+    state: Optional[str] = None
+
+    @field_validator("state")
+    @classmethod
+    def validate_state(cls, v: Optional[str]) -> Optional[str]:
+        if v is None:
+            return v
+        valid_ufs = {
+            "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO",
+            "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI",
+            "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO",
+        }
+        upper = v.upper()
+        if upper not in valid_ufs:
+            raise ValueError("UF inválida")
+        return upper
