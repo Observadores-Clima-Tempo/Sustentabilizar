@@ -197,86 +197,115 @@ def _build_criteria(
     total_score: int,
     thresholds: dict,
 ) -> List[CriterionResult]:
-    """Constrói a lista de critérios avaliados para exibição no certificado."""
+    """Constrói o detalhamento por componente da pontuação para exibição no certificado."""
     criteria = []
 
-    # Critério 1: Diagnóstico inicial
+    # --- Configurações de pontuação ---
+    config = db.query(ScoringConfig).first()
+    waste_scoring = {
+        row.waste_type: float(row.points_per_kg)
+        for row in db.query(WasteTypeScoring).all()
+    }
+
+    # Critério 1: Diagnóstico ambiental
     checklist_count = (
         db.query(func.count(ChecklistResponse.checklist_item_id.distinct()))
         .filter(ChecklistResponse.user_id == user_id)
         .scalar()
-    )
+    ) or 0
     criteria.append(
         CriterionResult(
-            label="Diagnóstico inicial",
-            description="Respostas ao questionário de diagnóstico ambiental",
+            icon="📋",
+            label="Diagnóstico ambiental",
+            description=f"{checklist_count} pergunta(s) respondida(s) no questionário",
             points_earned=score_from_checklist,
-            achieved=score_from_checklist > 0 and (checklist_count or 0) > 0,
+            achieved=score_from_checklist > 0,
         )
     )
 
-    # Critério 2: Registros de resíduos (30 dias)
+    if config is None:
+        return criteria
+
+    # Registros dos últimos 30 dias
     cutoff = datetime.now(tz=timezone.utc) - timedelta(days=30)
-    records_30d = (
-        db.query(func.count(WasteRecord.id))
+    records = (
+        db.query(WasteRecord)
         .filter(WasteRecord.user_id == user_id)
         .filter(WasteRecord.created_at >= cutoff)
-        .scalar()
-    ) or 0
+        .all()
+    )
+
+    # Critério 2: Pontos por registro (quantidade)
+    pts_per_record_total = len(records) * config.points_per_record_30d
     criteria.append(
         CriterionResult(
-            label="Registros recentes (30 dias)",
-            description=f"{records_30d} registro(s) nos últimos 30 dias",
-            points_earned=score_from_records,
-            achieved=records_30d > 0,
+            icon="♻️",
+            label="Registros de resíduos",
+            description=(
+                f"{len(records)} registro(s) nos últimos 30 dias"
+                f" × {config.points_per_record_30d} pt(s) cada"
+            ),
+            points_earned=pts_per_record_total,
+            achieved=len(records) > 0,
         )
     )
 
-    # Critério 3: Evidências registradas
-    evidence_count = (
-        db.query(func.count(Evidence.id))
-        .join(WasteRecord, Evidence.waste_record_id == WasteRecord.id)
-        .filter(WasteRecord.user_id == user_id)
-        .scalar()
-    ) or 0
+    # Critério 3: Pontos por peso (kg × taxa por tipo)
+    pts_from_weight = 0
+    total_weight = 0.0
+    for record in records:
+        pts_per_kg = waste_scoring.get(record.waste_type, 0.0)
+        pts_from_weight += int(float(record.weight_kg) * pts_per_kg)
+        total_weight += float(record.weight_kg)
     criteria.append(
         CriterionResult(
+            icon="⚖️",
+            label="Peso dos resíduos",
+            description=f"{total_weight:.1f} kg registrado(s) (pontuação varia por tipo de resíduo)",
+            points_earned=pts_from_weight,
+            achieved=pts_from_weight > 0,
+        )
+    )
+
+    # Critério 4: Diversidade de tipos de resíduo
+    unique_types = len({r.waste_type for r in records})
+    pts_diversity = unique_types * config.points_per_unique_type
+    criteria.append(
+        CriterionResult(
+            icon="🌿",
+            label="Diversidade de tipos",
+            description=(
+                f"{unique_types} tipo(s) diferente(s) de resíduo"
+                f" × {config.points_per_unique_type} pt(s) cada"
+            ),
+            points_earned=pts_diversity,
+            achieved=unique_types > 0,
+        )
+    )
+
+    # Critério 5: Evidências registradas
+    evidence_count = 0
+    for record in records:
+        ev_count = (
+            db.query(func.count(Evidence.id))
+            .filter(Evidence.waste_record_id == record.id)
+            .scalar()
+        )
+        evidence_count += ev_count or 0
+    pts_evidence = evidence_count * config.points_per_evidence
+    criteria.append(
+        CriterionResult(
+            icon="📸",
             label="Evidências registradas",
-            description=f"{evidence_count} evidência(s) anexada(s) aos registros",
-            points_earned=0,  # já contabilizado em score_from_records
+            description=(
+                f"{evidence_count} evidência(s) anexada(s) aos registros"
+                f" × {config.points_per_evidence} pt(s) cada"
+            ),
+            points_earned=pts_evidence,
             achieved=evidence_count > 0,
         )
     )
 
-    # Critério 4: Atingir nível Bronze
-    criteria.append(
-        CriterionResult(
-            label="Nível Bronze",
-            description=f"Mínimo {thresholds.get('bronze', 30)} pontos",
-            points_earned=0,
-            achieved=total_score >= thresholds.get("bronze", 30),
-        )
-    )
-
-    # Critério 5: Atingir nível Prata
-    criteria.append(
-        CriterionResult(
-            label="Nível Prata",
-            description=f"Mínimo {thresholds.get('prata', 70)} pontos",
-            points_earned=0,
-            achieved=total_score >= thresholds.get("prata", 70),
-        )
-    )
-
-    # Critério 6: Atingir nível Ouro
-    criteria.append(
-        CriterionResult(
-            label="Nível Ouro",
-            description=f"Mínimo {thresholds.get('ouro', 120)} pontos",
-            points_earned=0,
-            achieved=total_score >= thresholds.get("ouro", 120),
-        )
-    )
-
     return criteria
+
 

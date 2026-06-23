@@ -6,6 +6,7 @@ from pydantic import BaseModel
 
 
 class CriterionResult(BaseModel):
+    icon: str
     label: str
     description: str
     points_earned: int

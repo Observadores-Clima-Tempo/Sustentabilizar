@@ -194,61 +194,44 @@ export default function CertificadoPage() {
         )}
       </div>
 
-      {/* Critérios avaliados */}
+      {/* Detalhamento da pontuação */}
       {cert?.criteria && cert.criteria.length > 0 && (
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-          <h2 className="text-base font-semibold text-gray-900 mb-4">Critérios avaliados</h2>
-          <div className="space-y-3">
+          <h2 className="text-base font-semibold text-gray-900 mb-1">Detalhamento da pontuação</h2>
+          <p className="text-xs text-gray-400 mb-4">De onde vieram os seus pontos</p>
+          <div className="space-y-2">
             {cert.criteria.map((c, i) => (
-              <div key={i} className="flex items-start gap-3">
-                <span className="text-base flex-shrink-0 mt-0.5">
-                  {c.achieved ? '✅' : '🔴'}
-                </span>
+              <div
+                key={i}
+                className={`flex items-center gap-3 rounded-lg px-3 py-2.5 ${
+                  c.points_earned > 0 ? 'bg-green-50' : 'bg-gray-50'
+                }`}
+              >
+                <span className="text-lg flex-shrink-0">{c.icon}</span>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-800">{c.label}</p>
-                  <p className="text-xs text-gray-400">{c.description}</p>
+                  <p className={`text-sm font-medium ${c.points_earned > 0 ? 'text-gray-800' : 'text-gray-400'}`}>
+                    {c.label}
+                  </p>
+                  <p className="text-xs text-gray-400 truncate">{c.description}</p>
                 </div>
-                {c.points_earned > 0 && (
-                  <span className="text-xs font-semibold text-green-700 bg-green-50 px-2 py-0.5 rounded-full flex-shrink-0">
-                    +{c.points_earned} pts
-                  </span>
-                )}
+                <span
+                  className={`text-sm font-bold flex-shrink-0 ${
+                    c.points_earned > 0 ? 'text-green-700' : 'text-gray-300'
+                  }`}
+                >
+                  {c.points_earned > 0 ? `+${c.points_earned}` : '0'} pts
+                </span>
               </div>
             ))}
+
+            {/* Linha total */}
+            <div className="flex items-center justify-between px-3 py-3 border-t-2 border-gray-200 mt-2">
+              <span className="text-sm font-bold text-gray-900">Total</span>
+              <span className="text-lg font-bold text-green-700">{cert.total_score} pts</span>
+            </div>
           </div>
         </div>
       )}
-
-      {/* Composição da pontuação */}
-      <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-        <h2 className="text-base font-semibold text-gray-900 mb-4">Composição da pontuação</h2>
-        <div className="space-y-3">
-          <div className="flex justify-between items-center py-2 border-b border-gray-100">
-            <div className="flex items-center gap-2">
-              <span>📋</span>
-              <span className="text-sm text-gray-700">Diagnóstico inicial</span>
-            </div>
-            <span className="text-sm font-semibold text-gray-900">
-              {cert?.score_from_checklist || 0} pts
-            </span>
-          </div>
-          <div className="flex justify-between items-center py-2 border-b border-gray-100">
-            <div className="flex items-center gap-2">
-              <span>♻️</span>
-              <span className="text-sm text-gray-700">Registros de resíduos</span>
-            </div>
-            <span className="text-sm font-semibold text-gray-900">
-              {cert?.score_from_records || 0} pts
-            </span>
-          </div>
-          <div className="flex justify-between items-center py-2 bg-gray-50 rounded-lg px-3">
-            <span className="text-sm font-bold text-gray-900">Total</span>
-            <span className="text-lg font-bold text-green-700">
-              {cert?.total_score || 0} pts
-            </span>
-          </div>
-        </div>
-      </div>
 
       {/* CTA */}
       <Link
