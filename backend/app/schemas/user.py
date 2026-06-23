@@ -55,5 +55,6 @@ class UserOut(BaseModel):
     state: str
     created_at: datetime
     is_active: bool
+    is_admin: bool
 
     model_config = {"from_attributes": True}

@@ -35,6 +35,54 @@ app.mount("/uploads", StaticFiles(directory=settings.UPLOAD_DIR), name="uploads"
 app.include_router(api_router, prefix="/api/v1")
 
 
+@app.on_event("startup")
+async def bootstrap_admin() -> None:
+    """
+    Cria o usuário admin na inicialização se nenhum admin existir.
+    Idempotente — não cria duplicata.
+    """
+    from app.core.security import hash_password
+    from app.db.session import SessionLocal
+    from app.models.user import User
+
+    db = SessionLocal()
+    try:
+        admin_exists = (
+            db.query(User)
+            .filter(User.is_admin == True)  # noqa: E712
+            .first()
+        )
+        if admin_exists:
+            return
+
+        # Verifica se já existe um usuário com o e-mail admin
+        existing = db.query(User).filter(User.email == settings.ADMIN_EMAIL).first()
+        if existing:
+            existing.is_admin = True
+            db.commit()
+            return
+
+        admin_user = User(
+            name="Administrador",
+            email=settings.ADMIN_EMAIL,
+            cpf="000.000.000-00",
+            password_hash=hash_password(settings.ADMIN_PASSWORD),
+            profile_type="pessoa_fisica",
+            city="Campos dos Goytacazes",
+            state="RJ",
+            is_active=True,
+            is_admin=True,
+        )
+        db.add(admin_user)
+        db.commit()
+    except Exception:
+        db.rollback()
+        # Silencia erros de startup para não bloquear a API
+        # (ex: banco ainda não migrado)
+    finally:
+        db.close()
+
+
 @app.get("/health", tags=["health"])
 def health_check():
     """Verifica se a API está respondendo."""

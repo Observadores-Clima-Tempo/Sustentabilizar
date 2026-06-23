@@ -1,7 +1,9 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import PrivateRoute from './components/PrivateRoute'
 import PublicRoute from './components/PublicRoute'
+import AdminRoute from './components/AdminRoute'
 import DashboardLayout from './components/DashboardLayout'
+import AdminLayout from './components/AdminLayout'
 import { AuthProvider } from './contexts/AuthContext'
 import LandingPage from './pages/LandingPage'
 import LoginPage from './pages/LoginPage'
@@ -11,6 +13,10 @@ import NovoRegistroPage from './pages/NovoRegistroPage'
 import EvidenciaPage from './pages/EvidenciaPage'
 import RegistrosPage from './pages/RegistrosPage'
 import RegistroDetalhe from './pages/RegistroDetalhe'
+import AdminChecklistPage from './pages/admin/AdminChecklistPage'
+import AdminPontuacaoPage from './pages/admin/AdminPontuacaoPage'
+import AdminCertificacaoPage from './pages/admin/AdminCertificacaoPage'
+import AdminResiduosPage from './pages/admin/AdminResiduosPage'
 
 function App() {
   return (
@@ -66,6 +72,21 @@ function App() {
                 </div>
               }
             />
+          </Route>
+
+          {/* Painel Admin */}
+          <Route
+            element={
+              <AdminRoute>
+                <AdminLayout />
+              </AdminRoute>
+            }
+          >
+            <Route path="/admin" element={<Navigate to="/admin/checklist" replace />} />
+            <Route path="/admin/checklist" element={<AdminChecklistPage />} />
+            <Route path="/admin/pontuacao" element={<AdminPontuacaoPage />} />
+            <Route path="/admin/certificacao" element={<AdminCertificacaoPage />} />
+            <Route path="/admin/residuos" element={<AdminResiduosPage />} />
           </Route>
 
           {/* Fallback */}

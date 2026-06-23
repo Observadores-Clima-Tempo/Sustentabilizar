@@ -1,4 +1,6 @@
+import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
+import api from '../lib/axios'
 import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 
@@ -33,43 +35,40 @@ const HOW_IT_WORKS = [
   },
 ]
 
-const CERTIFICATION_LEVELS = [
+const CERTIFICATION_LEVELS_META = [
   {
+    key: 'bronze',
     level: 'Bronze',
     icon: '🥉',
-    minPoints: 100,
     borderClass: 'border-amber-300',
     iconBgClass: 'bg-amber-50',
     textColorClass: 'text-amber-700',
     criteria: [
-      'Mínimo de 100 pontos',
       'Separação básica de recicláveis',
       'Pelo menos 3 registros mensais',
     ],
   },
   {
+    key: 'prata',
     level: 'Prata',
     icon: '🥈',
-    minPoints: 300,
     borderClass: 'border-gray-300',
     iconBgClass: 'bg-gray-100',
     textColorClass: 'text-gray-500',
     criteria: [
-      'Mínimo de 300 pontos',
       'Separação consistente de recicláveis',
       'Pelo menos 8 registros mensais',
       'Evidências fotográficas comprovadas',
     ],
   },
   {
+    key: 'ouro',
     level: 'Ouro',
     icon: '🥇',
-    minPoints: 700,
     borderClass: 'border-yellow-400',
     iconBgClass: 'bg-yellow-50',
     textColorClass: 'text-yellow-600',
     criteria: [
-      'Mínimo de 700 pontos',
       'Descarte responsável de todos os tipos',
       'Frequência regular de registros',
       'Histórico comprovado de 3+ meses',
@@ -77,7 +76,25 @@ const CERTIFICATION_LEVELS = [
   },
 ]
 
+const DEFAULT_THRESHOLDS = { bronze: 30, prata: 70, ouro: 120 }
+
 export default function LandingPage() {
+  const { data: publicConfig } = useQuery({
+    queryKey: ['config', 'public'],
+    queryFn: async () => {
+      const { data } = await api.get('/config/public')
+      return data
+    },
+    staleTime: 5 * 60 * 1000, // 5 min
+    retry: false,
+  })
+
+  const thresholds = publicConfig?.certification_thresholds ?? DEFAULT_THRESHOLDS
+
+  const certificationLevels = CERTIFICATION_LEVELS_META.map((level) => ({
+    ...level,
+    minPoints: thresholds[level.key],
+  }))
   return (
     <div className="min-h-screen bg-white">
       {/* ── Header ─────────────────────────────────────────── */}
@@ -180,7 +197,7 @@ export default function LandingPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {CERTIFICATION_LEVELS.map((cert) => (
+            {certificationLevels.map((cert) => (
               <Card
                 key={cert.level}
                 className={`p-6 border-2 ${cert.borderClass} space-y-5`}

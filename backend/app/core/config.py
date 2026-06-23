@@ -11,5 +11,9 @@ class Settings(BaseSettings):
     UPLOAD_DIR: str = "uploads"
     MAX_UPLOAD_SIZE_MB: int = 10
 
+    # Admin bootstrap — criado automaticamente no startup se nenhum admin existir
+    ADMIN_EMAIL: str = "admin@sustentabilizar.com"
+    ADMIN_PASSWORD: str = "sustentabilizaruenf@dmin123"
+
 
 settings = Settings()

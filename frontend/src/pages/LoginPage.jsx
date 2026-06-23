@@ -30,7 +30,8 @@ export default function LoginPage() {
       localStorage.setItem('access_token', tokenData.access_token)
       const userData = await getMe()
       signIn(tokenData.access_token, userData)
-      navigate('/dashboard')
+      // Admins vão para o painel administrativo; usuários comuns para o dashboard
+      navigate(userData.is_admin ? '/admin' : '/dashboard')
     } catch (err) {
       const detail = err?.response?.data?.detail
       if (typeof detail === 'string') {

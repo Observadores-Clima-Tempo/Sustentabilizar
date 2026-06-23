@@ -38,3 +38,4 @@ class User(Base):
         nullable=False,
     )
     is_active = Column(Boolean, nullable=False, default=True)
+    is_admin = Column(Boolean, nullable=False, default=False)
