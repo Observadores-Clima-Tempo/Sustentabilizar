@@ -5,9 +5,9 @@ import { getChecklist, submitResponses } from '../services/checklist.service'
 
 const LEVEL_LABELS = {
   sem_nivel: { label: 'Sem nível', icon: '🌱', color: 'text-gray-500', bg: 'bg-gray-50 border-gray-200' },
-  bronze: { label: 'Bronze', icon: '🥉', color: 'text-amber-700', bg: 'bg-amber-50 border-amber-300' },
-  prata: { label: 'Prata', icon: '🥈', color: 'text-gray-500', bg: 'bg-gray-100 border-gray-300' },
-  ouro: { label: 'Ouro', icon: '🥇', color: 'text-yellow-600', bg: 'bg-yellow-50 border-yellow-400' },
+  bronze: { label: 'Bronze', icon: '🥉', color: 'text-orange-700', bg: 'bg-orange-50 border-orange-400' },
+  prata: { label: 'Prata', icon: '🥈', color: 'text-slate-500', bg: 'bg-slate-100 border-slate-400' },
+  ouro: { label: 'Ouro', icon: '🥇', color: 'text-amber-600', bg: 'bg-amber-50 border-amber-400' },
 }
 
 function ProgressBar({ current, total }) {

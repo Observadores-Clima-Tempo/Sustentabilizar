@@ -14,9 +14,9 @@ const STATES = [
 
 const LEVEL_INFO = {
   sem_nivel: { label: 'Sem certificação', icon: '🌱', textColor: 'text-gray-400', badgeBg: 'bg-gray-50', badgeBorder: 'border-gray-200' },
-  bronze: { label: 'Bronze', icon: '🥉', textColor: 'text-amber-700', badgeBg: 'bg-amber-50', badgeBorder: 'border-amber-300' },
-  prata: { label: 'Prata', icon: '🥈', textColor: 'text-gray-500', badgeBg: 'bg-gray-100', badgeBorder: 'border-gray-300' },
-  ouro: { label: 'Ouro', icon: '🥇', textColor: 'text-yellow-600', badgeBg: 'bg-yellow-50', badgeBorder: 'border-yellow-400' },
+  bronze: { label: 'Bronze', icon: '🥉', textColor: 'text-orange-700', badgeBg: 'bg-orange-50', badgeBorder: 'border-orange-400' },
+  prata: { label: 'Prata', icon: '🥈', textColor: 'text-slate-500', badgeBg: 'bg-slate-100', badgeBorder: 'border-slate-400' },
+  ouro: { label: 'Ouro', icon: '🥇', textColor: 'text-amber-600', badgeBg: 'bg-amber-50', badgeBorder: 'border-amber-400' },
 }
 
 const WASTE_TYPE_LABELS = {
