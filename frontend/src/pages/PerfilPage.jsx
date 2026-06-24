@@ -114,7 +114,7 @@ export default function PerfilPage() {
   const levelInfo = LEVEL_INFO[level] || LEVEL_INFO.sem_nivel
 
   return (
-    <div className="space-y-6">
+    <div className="max-w-3xl mx-auto space-y-6">
       {/* Título */}
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Meu Perfil</h1>

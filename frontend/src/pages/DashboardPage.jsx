@@ -62,7 +62,7 @@ export default function DashboardPage() {
     .slice(0, 4)
 
   return (
-    <div className="space-y-6">
+    <div className="max-w-3xl mx-auto space-y-6">
       {/* Saudação */}
       <div>
         <h1 className="text-2xl font-bold text-gray-900">
