@@ -127,31 +127,30 @@ export default function CertificadoPage() {
       </div>
 
       {/* Card principal do certificado */}
-      <div className={`bg-white rounded-xl border ${info.cardBorder} shadow-sm p-6`}>
-        <div className="flex items-start justify-between gap-4">
-          {/* Conteúdo esquerdo */}
-          <div className="flex-1 min-w-0">
-            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">
-              Certificado Ambiental
-            </p>
-            <div className="flex items-center gap-3 mb-4">
-              <span className="text-5xl">{info.icon}</span>
-              <h2 className={`text-3xl font-bold ${info.textColor}`}>
-                Nível {info.label}
-              </h2>
-            </div>
-            <div className="border border-gray-200 rounded-lg p-3 mb-4">
-              <p className="text-sm font-semibold text-gray-900">{user?.name}</p>
-              <p className="text-xs text-gray-400 mt-0.5">{maskedCpf}</p>
-              <p className="text-xs text-gray-400 mt-0.5">Emitido em {emittedDate}</p>
-            </div>
-            <p className="text-sm text-blue-600">{info.motivational}</p>
+      <div className={`bg-white rounded-xl border ${info.cardBorder} shadow-sm p-6 relative overflow-hidden`}>
+        {/* Badge de pontos — círculo absoluto cortado no canto superior direito */}
+        <div className="absolute -right-8 -top-8 w-36 h-36 bg-gray-100 rounded-full flex flex-col items-center justify-center">
+          <p className="text-3xl font-bold text-gray-900 mt-8 mr-8">{cert?.total_score || 0}</p>
+          <p className="text-xs text-gray-500 mr-8">pontos</p>
+        </div>
+
+        {/* Conteúdo */}
+        <div className="pr-16">
+          <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">
+            Certificado Ambiental
+          </p>
+          <div className="flex items-center gap-3 mb-4">
+            <span className="text-5xl">{info.icon}</span>
+            <h2 className={`text-3xl font-bold ${info.textColor}`}>
+              Nível {info.label}
+            </h2>
           </div>
-          {/* Badge de pontos */}
-          <div className="flex-shrink-0 bg-gray-100 rounded-xl px-5 py-4 text-center">
-            <p className="text-3xl font-bold text-gray-900">{cert?.total_score || 0}</p>
-            <p className="text-xs text-gray-500 mt-0.5">pontos</p>
+          <div className="border border-gray-200 rounded-lg p-3 mb-4">
+            <p className="text-sm font-semibold text-gray-900">{user?.name}</p>
+            <p className="text-xs text-gray-400 mt-0.5">{maskedCpf}</p>
+            <p className="text-xs text-gray-400 mt-0.5">Emitido em {emittedDate}</p>
           </div>
+          <p className="text-sm text-blue-600">{info.motivational}</p>
         </div>
       </div>
 
