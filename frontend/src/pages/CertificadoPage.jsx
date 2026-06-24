@@ -51,26 +51,21 @@ function LevelMedal({ level, currentLevel, score, minScore }) {
 
   if (level === 'sem_nivel') return null
 
+  const circleClass = isCurrent
+    ? `border-[3px] ${info.badgeBorder}`
+    : isAchieved
+    ? `border-2 ${info.badgeBorder} opacity-75`
+    : 'border-2 border-gray-200 opacity-40'
+
   return (
-    <div
-      className={`flex flex-col items-center p-4 rounded-xl border-2 transition-all ${
-        isCurrent
-          ? `${info.badgeBg} ${info.badgeBorder} shadow-sm`
-          : isAchieved
-          ? `${info.badgeBg} ${info.badgeBorder} opacity-80`
-          : 'bg-gray-50 border-gray-200 opacity-50'
-      }`}
-    >
-      <span className="text-3xl mb-1">{info.icon}</span>
+    <div className="flex flex-col items-center gap-1.5">
+      <div className={`w-14 h-14 rounded-full flex items-center justify-center text-2xl ${circleClass}`}>
+        {info.icon}
+      </div>
       <span className={`text-sm font-semibold ${isAchieved ? info.textColor : 'text-gray-400'}`}>
         {info.label}
       </span>
-      <span className="text-xs text-gray-400 mt-0.5">≥ {minScore} pts</span>
-      {isCurrent && (
-        <span className="mt-2 text-xs font-semibold text-white bg-green-600 px-2 py-0.5 rounded-full">
-          Atual
-        </span>
-      )}
+      <span className="text-xs text-gray-400">≥{minScore}pts</span>
     </div>
   )
 }
@@ -132,46 +127,48 @@ export default function CertificadoPage() {
       </div>
 
       {/* Card principal do certificado */}
-      <div className={`bg-white rounded-xl border-2 ${info.cardBorder} shadow-sm p-6`}>
-        <div className="text-center">
-          {/* Badge CERTIFICADO AMBIENTAL */}
-          <span className="inline-block text-xs font-bold text-green-700 bg-green-50 border border-green-200 px-4 py-1 rounded-full uppercase tracking-widest mb-4">
-            Certificado Ambiental
-          </span>
-
-          {/* Ícone + nível */}
-          <div className="text-6xl mb-2">{info.icon}</div>
-          <h2 className={`text-3xl font-bold ${info.textColor} mb-1`}>{info.label}</h2>
-          <p className="text-4xl font-bold text-gray-900 mb-1">{cert?.total_score || 0}</p>
-          <p className="text-sm text-gray-400 mb-4">pontos totais</p>
-
-          {/* Dados do usuário */}
-          <div className="border-t border-gray-100 pt-4 text-sm text-gray-600 space-y-1">
-            <p className="font-semibold text-gray-900 text-base">{user?.name}</p>
-            <p className="text-gray-400">CPF: {maskedCpf}</p>
-            <p className="text-gray-400">Emitido em: {emittedDate}</p>
+      <div className={`bg-white rounded-xl border ${info.cardBorder} shadow-sm p-6`}>
+        <div className="flex items-start justify-between gap-4">
+          {/* Conteúdo esquerdo */}
+          <div className="flex-1 min-w-0">
+            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">
+              Certificado Ambiental
+            </p>
+            <div className="flex items-center gap-3 mb-4">
+              <span className="text-5xl">{info.icon}</span>
+              <h2 className={`text-3xl font-bold ${info.textColor}`}>
+                Nível {info.label}
+              </h2>
+            </div>
+            <div className="border border-gray-200 rounded-lg p-3 mb-4">
+              <p className="text-sm font-semibold text-gray-900">{user?.name}</p>
+              <p className="text-xs text-gray-400 mt-0.5">{maskedCpf}</p>
+              <p className="text-xs text-gray-400 mt-0.5">Emitido em {emittedDate}</p>
+            </div>
+            <p className="text-sm text-blue-600">{info.motivational}</p>
           </div>
-
-          {/* Mensagem motivacional */}
-          <p className="mt-4 text-sm text-gray-500 italic">{info.motivational}</p>
+          {/* Badge de pontos */}
+          <div className="flex-shrink-0 bg-gray-100 rounded-xl px-5 py-4 text-center">
+            <p className="text-3xl font-bold text-gray-900">{cert?.total_score || 0}</p>
+            <p className="text-xs text-gray-500 mt-0.5">pontos</p>
+          </div>
         </div>
       </div>
 
       {/* Progressão de níveis */}
       <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-        <h2 className="text-base font-semibold text-gray-900 mb-4">Progressão de níveis</h2>
-        <div className="grid grid-cols-3 gap-3 mb-4">
-          <LevelMedal level="bronze" currentLevel={level} score={cert?.total_score || 0} minScore={thresholds.bronze} />
-          <LevelMedal level="prata" currentLevel={level} score={cert?.total_score || 0} minScore={thresholds.prata} />
-          <LevelMedal level="ouro" currentLevel={level} score={cert?.total_score || 0} minScore={thresholds.ouro} />
+        <h2 className="text-base font-semibold text-gray-900 mb-5">Progressão de níveis</h2>
+        <div className="flex justify-around mb-6">
+          <LevelMedal level="bronze" currentLevel={level} minScore={thresholds.bronze} />
+          <LevelMedal level="prata" currentLevel={level} minScore={thresholds.prata} />
+          <LevelMedal level="ouro" currentLevel={level} minScore={thresholds.ouro} />
         </div>
 
         {nextLevel && (
           <div>
-            <div className="flex justify-between text-xs text-gray-500 mb-1">
-              <span>Progresso para {nextLevelInfo?.label}</span>
-              <span>{cert?.total_score || 0} / {nextLevelMin} pts</span>
-            </div>
+            <p className="text-xs font-semibold text-gray-700 mb-2">
+              Progresso para {nextLevelInfo?.label}
+            </p>
             <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
               <div
                 className="h-full bg-green-600 rounded-full transition-all duration-500"
@@ -179,16 +176,15 @@ export default function CertificadoPage() {
               />
             </div>
             {pointsToNext > 0 && (
-              <p className="text-xs text-gray-500 mt-2 text-center">
-                Faltam <strong className="text-gray-700">{pointsToNext} pontos</strong> para o nível{' '}
-                <strong className={nextLevelInfo?.textColor}>{nextLevelInfo?.label}</strong>
+              <p className="text-xs text-blue-600 mt-3 text-center">
+                Faltam <strong>{pointsToNext} pontos</strong> para atingir o nível {nextLevelInfo?.label}
               </p>
             )}
           </div>
         )}
 
         {!nextLevel && level === 'ouro' && (
-          <p className="text-xs text-center text-yellow-600 font-medium mt-2">
+          <p className="text-xs text-center text-yellow-600 font-medium">
             🏆 Você atingiu o nível máximo!
           </p>
         )}
