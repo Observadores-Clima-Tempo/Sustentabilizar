@@ -15,8 +15,8 @@ class Settings(BaseSettings):
     CORS_ORIGINS: str = "http://localhost:5173,http://127.0.0.1:5173"
 
     # Admin bootstrap — criado automaticamente no startup se nenhum admin existir
-    ADMIN_EMAIL: str = "admin@sustentabilizar.com"
-    ADMIN_PASSWORD: str = "sustentabilizaruenf@dmin123"
+    ADMIN_EMAIL: str = "admin@email.com-change-in-productions"
+    ADMIN_PASSWORD: str = "admin-password-change-in-production"
 
 
 settings = Settings()
