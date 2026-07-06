@@ -2,6 +2,7 @@ import { Link, useParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { useAuth } from '../contexts/AuthContext'
 import { getRecord } from '../services/waste.service'
+import AuthenticatedImage from '../components/ui/AuthenticatedImage'
 
 const WASTE_LABELS = {
   papel: { label: 'Papel', icon: '📄' },
@@ -151,18 +152,12 @@ export default function RegistroDetalhe() {
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
             {evidences.map((ev) => (
               <div key={ev.id} className="group">
-                <a
-                  href={`http://localhost:8000${ev.file_url}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block"
-                >
-                  <img
-                    src={`http://localhost:8000${ev.file_url}`}
-                    alt={ev.file_name}
-                    className="w-full h-28 object-cover rounded-lg border border-gray-200 group-hover:opacity-90 transition-opacity"
-                  />
-                </a>
+                <AuthenticatedImage
+                  evidenceId={ev.id}
+                  alt={ev.file_name}
+                  fileName={ev.file_name}
+                  className="w-full h-28 object-cover rounded-lg border border-gray-200 group-hover:opacity-90 transition-opacity"
+                />
                 <p className="mt-1 text-xs text-gray-600 truncate">{ev.file_name}</p>
                 <p className="text-xs text-gray-400">{formatDateTime(ev.captured_at)}</p>
               </div>
