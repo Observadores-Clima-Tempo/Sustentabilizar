@@ -21,6 +21,7 @@ import AdminChecklistPage from './pages/admin/AdminChecklistPage'
 import AdminPontuacaoPage from './pages/admin/AdminPontuacaoPage'
 import AdminCertificacaoPage from './pages/admin/AdminCertificacaoPage'
 import AdminResiduosPage from './pages/admin/AdminResiduosPage'
+import PWAInstallPrompt from './components/PWAInstallPrompt'
 
 function App() {
   return (
@@ -77,6 +78,7 @@ function App() {
           {/* 404 — rota não encontrada */}
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
+      <PWAInstallPrompt />
       </AuthProvider>
     </BrowserRouter>
   )
