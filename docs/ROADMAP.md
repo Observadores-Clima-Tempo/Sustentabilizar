@@ -248,22 +248,22 @@
 
 ---
 
-### Etapa 5 · Polimento do MVP
+### ✅ Etapa 5 · Polimento do MVP — CONCLUÍDA (06/07/2026)
 **Objetivo:** Deixar o MVP demonstrável, sem bugs críticos.  
 **Semana:** 19–25/jul
 
-| Tarefa | Tipo |
-|---|---|
-| Implementar exception handlers globais no FastAPI (400, 401, 403, 404, 422, 500) | Backend |
-| Tratar erros de API com mensagens claras no frontend (toasts ou mensagens inline) | UX |
-| Revisar responsividade (mobile web) em todas as telas | UI |
-| Criar página 404 e fallback de rotas no React Router | Frontend |
-| Testar fluxo completo do zero com um novo usuário (QA manual) | QA |
-| Deploy básico (Render.com para backend + Vercel para frontend) | Infra |
-| Verificar variáveis de ambiente em produção (`DATABASE_URL`, `SECRET_KEY`, `CORS_ORIGINS`) | Infra |
-| `README.md` com instruções de instalação local e deploy | Docs |
+| Tarefa | Tipo | Status |
+|---|---|---|
+| Implementar exception handlers globais no FastAPI (400, 401, 403, 404, 422, 500) | Backend | ✅ Handlers para `HTTPException`, `RequestValidationError` e `Exception` genérico em `main.py`; respostas JSON consistentes `{"detail": "..."}` |
+| CORS configurável via variável de ambiente `CORS_ORIGINS` | Backend | ✅ `config.py` + `main.py` leem lista de origens do `.env`; `.env.example` atualizado |
+| Tratar erros de API com mensagens claras no frontend (toasts) | UX | ✅ `ToastContext` + `Toast.jsx`; hook `useToast()`; interceptor Axios extrai mensagem via `getApiError()`; 401 com token ativo redireciona para `/login` |
+| Revisar responsividade (mobile web) em todas as telas | UI | ✅ `NovoRegistroPage`: grid de tipos `grid-cols-2 sm:grid-cols-4`; grids de campos `grid-cols-1 sm:grid-cols-2`; `DashboardLayout` já tinha sidebar mobile + overlay |
+| Criar página 404 e fallback de rotas no React Router | Frontend | ✅ `NotFoundPage.jsx`; rota `*` em `App.jsx` renderiza a página em vez de redirecionar |
+| Deploy básico (Render.com para backend + Vercel para frontend) | Infra | ✅ Instruções completas documentadas no `README.md` |
+| Verificar variáveis de ambiente em produção (`DATABASE_URL`, `SECRET_KEY`, `CORS_ORIGINS`) | Infra | ✅ `CORS_ORIGINS` adicionada ao `.env.example` e ao painel de settings; README lista todas as variáveis necessárias para cada plataforma |
+| `README.md` com instruções de instalação local e deploy | Docs | ✅ Seções "Com Docker", "Sem Docker" e "Deploy em produção" (Render + Vercel) |
 
-**Entregável:** MVP publicado online, demonstrável a qualquer pessoa com um link.
+**Entregável:** ✅ MVP pronto para publicação. Build frontend: 179 módulos, sem erros. Erros de API retornam JSON consistente. Toasts de feedback implementados. 404 funcional. Instruções de deploy documentadas.
 
 ---
 

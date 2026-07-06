@@ -5,6 +5,7 @@ import AdminRoute from './components/AdminRoute'
 import DashboardLayout from './components/DashboardLayout'
 import AdminLayout from './components/AdminLayout'
 import { AuthProvider } from './contexts/AuthContext'
+import NotFoundPage from './pages/NotFoundPage'
 import LandingPage from './pages/LandingPage'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
@@ -73,8 +74,8 @@ function App() {
             <Route path="/admin/residuos" element={<AdminResiduosPage />} />
           </Route>
 
-          {/* Fallback */}
-          <Route path="*" element={<Navigate to="/" replace />} />
+          {/* 404 — rota não encontrada */}
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

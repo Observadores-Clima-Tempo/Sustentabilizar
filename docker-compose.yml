@@ -4,6 +4,7 @@ services:
   db:
     image: postgres:15-alpine
     container_name: sustentabilizar-db
+    restart: always
     environment:
       POSTGRES_USER: sustentabilizar
       POSTGRES_PASSWORD: sustentabilizar_password
@@ -23,8 +24,9 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: sustentabilizar-backend
+    restart: always
     ports:
-      - "8000:8000"
+      - "5434:8000"
     volumes:
       - ./backend:/app
       - ./backend/uploads:/app/uploads
@@ -41,6 +43,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     container_name: sustentabilizar-frontend
+    restart: always
     ports:
       - "5173:5173"
     volumes:

@@ -86,7 +86,7 @@ export default function NovoRegistroPage() {
           <label className="block text-sm font-medium text-gray-700 mb-3">
             Tipo de resíduo <span className="text-red-500">*</span>
           </label>
-          <div className="grid grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {WASTE_TYPES.map(({ value, label, icon }) => (
               <button
                 key={value}
@@ -110,7 +110,7 @@ export default function NovoRegistroPage() {
 
         {/* Peso e Volume */}
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1">
               <label className="block text-sm font-medium text-gray-700">
                 Peso (kg) <span className="text-red-500">*</span>
@@ -147,7 +147,7 @@ export default function NovoRegistroPage() {
 
         {/* Frequência e Data */}
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1">
               <label className="block text-sm font-medium text-gray-700">
                 Frequência <span className="text-red-500">*</span>
