@@ -80,11 +80,12 @@ npm run dev
    - **Build Command:** `npm run build`
    - **Output Directory:** `dist`
 
-2. Adicione a variável de ambiente no painel do Vercel:
+2. Adicione as variáveis de ambiente no painel do Vercel:
 
 | Variável | Valor |
 |---|---|
 | `VITE_API_URL` | URL da sua API no Render (ex: `https://sustentabilizar-api.onrender.com/api/v1`) |
+| `ALLOWED_HOSTS` | _(opcional)_ Domínios externos permitidos pelo servidor de dev Vite, separados por vírgula. Necessário ao usar tuneis como Cloudflare Tunnel (ex: `meu-app.trycloudflare.com`) |
 
 > ⚠️ **Importante:** No Render, o `CORS_ORIGINS` deve conter o domínio Vercel exato. No Vercel, o `VITE_API_URL` deve apontar para o Render. Ambos sem barra final.
 
