@@ -56,8 +56,8 @@ export default function LoginPage() {
 
       {/* Logo */}
       <div className="flex items-center gap-2 mb-6">
-        <span className="text-2xl">🌿</span>
-        <span className="text-xl font-bold text-gray-900">Sustentabilizar</span>
+        <span className="text-2xl" aria-hidden="true">♻️</span>
+        <span className="text-xl font-bold text-green-700">Sustentabilizar</span>
       </div>
 
       <h1 className="text-2xl font-bold text-gray-900 mb-1">Entrar</h1>
