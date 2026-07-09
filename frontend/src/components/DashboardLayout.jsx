@@ -42,8 +42,8 @@ export default function DashboardLayout() {
         {/* Logo */}
         <div className="px-6 py-5 border-b border-gray-200">
           <Link to="/dashboard" className="flex items-center gap-2">
-            <span className="text-green-700 text-xl">🌱</span>
-            <span className="text-base font-semibold text-gray-900">Sustentabilizar</span>
+            <span className="text-2xl" aria-hidden="true">♻️</span>
+            <span className="text-xl font-bold text-green-700">Sustentabilizar</span>
           </Link>
         </div>
 
@@ -84,7 +84,7 @@ export default function DashboardLayout() {
       {/* Conteúdo principal */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Top bar mobile */}
-        <header className="lg:hidden bg-white border-b border-gray-200 px-4 py-3 flex items-center gap-3">
+        <header className="lg:hidden sticky top-0 z-10 bg-white border-b border-gray-200 px-4 py-3 flex items-center gap-3">
           <button
             onClick={() => setSidebarOpen(true)}
             className="p-2 rounded-lg text-gray-500 hover:bg-gray-100"
@@ -94,7 +94,8 @@ export default function DashboardLayout() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </button>
-          <span className="text-sm font-semibold text-gray-900">Sustentabilizar</span>
+          <span className="text-2xl" aria-hidden="true">♻️</span>
+          <span className="text-xl font-bold text-green-700">Sustentabilizar</span>
         </header>
 
         <main className="flex-1 px-4 py-6 lg:px-6 overflow-auto">
