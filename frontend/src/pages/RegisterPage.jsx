@@ -89,23 +89,19 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center px-4 py-12">
-      {/* Voltar para a landing page */}
-      <div className="w-full max-w-md mb-4">
-        <Link
-          to="/"
-          className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition-colors duration-150"
-        >
-          <span>←</span> Voltar ao início
-        </Link>
-      </div>
+    <div className="min-h-screen bg-gray-100 flex flex-col">
+      {/* Header */}
+      <header className="sticky top-0 z-50 bg-white border-b border-gray-200">
+        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center">
+          <Link to="/" className="flex items-center gap-2">
+            <span className="text-2xl" aria-hidden="true">♻️</span>
+            <span className="text-xl font-bold text-green-700">Sustentabilizar</span>
+          </Link>
+        </div>
+      </header>
 
-      {/* Logo */}
-      <div className="flex items-center gap-2 mb-6">
-        <span className="text-2xl" aria-hidden="true">♻️</span>
-        <span className="text-xl font-bold text-green-700">Sustentabilizar</span>
-      </div>
-
+      {/* Conteúdo */}
+      <div className="flex-1 flex flex-col items-center justify-center px-4 py-12">
       <h1 className="text-2xl font-bold text-gray-900 mb-1">Crie sua conta</h1>
       <p className="text-sm text-gray-500 mb-8">Pessoa Física · Gratuito</p>
 
@@ -253,6 +249,7 @@ export default function RegisterPage() {
           Entrar
         </Link>
       </p>
+      </div>
     </div>
   )
 }
